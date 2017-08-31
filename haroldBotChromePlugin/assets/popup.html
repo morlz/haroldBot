@@ -1,0 +1,132 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+
+	<link rel="stylesheet/less" type="text/css" href="css/main.less" />
+
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/less.min.js"></script>
+	<script src="js/socket.io.js"></script>
+	<script src="js/vue.js"></script>
+
+	<script type="text/x-template" id="item-tpl">
+		<li>
+			<div class="audioName">{{ index + 1 }}. {{ filename }}</div>
+			<div class="buttons">
+				<div class="buttonNormal" v-if="typeof add == 'number'" @click="$emit('add')">Добавить</div>
+				<div class="buttonNormal buttonRed" @click="$emit('remove')">Удалить</div>
+			</div>
+		</li>
+	</script>
+</head>
+<body>
+	<div class="mainWrapper">
+		<section id="server">
+			<h2>Сервер</h2>
+			<div class="desc">
+				<p>
+					ИП сервера: <input id="ip" v-model="ip" type="text" value="node server ip">
+				</p>
+				<div class="buttons">
+					<div id="refreshAll" class="buttonNormal" @click="refreshAll">Обновить</div>
+				</div>
+			</div>
+		</section>
+		<section id="uid">
+			<h2>ID Пользоателя</h2>
+			<div class="desc">
+				<p>
+					Ваш ID: <input id="UID" v-model="UID" type="text" value="loading" readonly>
+				</p>
+				<div class="buttons">
+					<div id="clearUID" class="buttonNormal" @click="clearUID">Очистить UID</div>
+				</div>
+			</div>
+		</section>
+		<section id="player" v-if="UID">
+			<h2>Аудио</h2>
+			<div class="desc">
+				<p>
+					Сейчас играет: <input id="nowPlaying" v-model="nowPlaying" type="text" value="loading" readonly>
+				</p>
+				<div class="buttons">
+					<div id="pause" class="buttonNormal" v-if="onPause" @click="resume">Продолжить</div>
+					<div id="resume" class="buttonNormal" v-else="onPause" @click="pause">Приостановить</div>
+					<div id="skip" class="buttonNormal" @click="skip">Пропусить</div>
+				</div>
+			</div>
+		</section>
+		<section id="volume" v-if="UID">
+			<h2>Громкость</h2>
+			<div class="desc">
+				<p>
+					Общяя громкость плеера: <input id="volumeVal" type="text" v-model="volume" disabled>
+				</p>
+				<div class="slider">
+					<div id="volumeSlider"></div>
+				</div>
+				<div class="buttons">
+					<div id="defaultVolume" class="buttonNormal" @click="defaultVolume">Сбросить</div>
+				</div>
+			</input>
+		</section>
+		<section id="queue" v-show="queue[0]" v-if="UID">
+			<h2>Очередь</h2>
+			<div class="desc">
+				<ol class="list">
+					<li 	is="item"
+					      	v-for="(item, index) in queue"
+					      	v-bind:key="index"
+					      	v-bind:filename="item.fileName"
+							v-bind:index="index"
+							v-bind:add="false"
+							v-if="item"
+					      	v-on:remove="removeFromQueue(index)"
+					    ></li>
+				</ol>
+				<div class="buttons">
+					<div id="clearQueue" class="buttonNormal buttonRed" @click="clearQueue">Очистить очередь</div>
+				</div>
+			</div>
+		</section>
+		<section id="playlist" v-show="playList.length" v-if="UID">
+			<h2>Плейлист</h2>
+			<div class="desc">
+				<p>
+					Добавить элементы из плейлиста в очередь: <input id="addFromPlaylist" type="text" placeholder="Количество" v-model="addCount">
+				</p>
+				<div class="buttons">
+					<div id="addFromPlaylist" class="buttonNormal" @click="add">Добавить</div>
+				</div>
+				<ol class="list selectable">
+					<li 	is="item"
+							v-for="(item, index) in playList"
+							v-bind:key="index"
+							v-bind:filename="item.fileName"
+							v-bind:index="index"
+							v-bind:add="index"
+							v-on:remove="removeFromPlayList(index)"
+							v-on:add="addToQueueFromPlaylist(index)"
+						></li>
+				</ol>
+			</div>
+		</section>
+
+		<div class="withSelected" v-bind:class="{withSelectedShowed: playListSelectedCount}">
+			<p>С выбраными: </p>
+			<div class="buttons">
+				<div class="buttonNormal" @click="unselectSelected">Отменить выделение</div>
+				<div class="buttonNormal buttonGreen" @click="addSelectedFromPlaylistInQueue">Добавить в очередь</div>
+				<div class="buttonNormal buttonRed" @click="removeSelectedFromPlayList">Удалить</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="content.js"></script>
+</body>
+</html>

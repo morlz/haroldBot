@@ -1,0 +1,223 @@
+@color0: rgb(54,57,63);
+@color1: rgb(47,49,54);
+
+@color2: #f6f6f7;
+@color2_1: #72767d;
+@color2_2: white;
+
+@color3: rgb(114,137,218);
+@color4: rgb(103, 123, 196);
+@color5: rgb(66,69,76);
+
+@removeButtonBackgroundColor: rgba(240, 71, 71, 0.5);
+@removeButtonBackgroundColorHover: rgb(240, 71, 71);
+
+@yButtonBackground: #43b581;
+
+@sliderBackground: #7289da;
+@sliderColor: #fff;
+
+@selectedBackground: #4a433b;
+@selectedColor: #faa222;
+
+
+html {
+	height: 100%;
+}
+
+body {
+	width: 700px;
+	min-height: 700px;
+	height: 100%;
+	background: @color0;
+	color: @color2;
+	font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+}
+
+span {
+	display: inline-block;
+}
+
+
+.mainWrapper {
+	margin-bottom: 50px;
+	section {
+		margin: 15px;
+		padding: 10px;
+		h2 {
+			margin: 5px 0;
+		}
+		border-bottom: 1px solid @color5;
+		.desc {
+			color: @color2_1;
+			display: grid;
+			grid-auto-flow: column;
+			align-items: center;
+			justify-content: space-between;
+			.selectable {
+				cursor: crosshair;
+			}
+			.list {
+				grid-area: l;
+				padding: 0;
+				user-select: none;
+				> .ui-selected, > .ui-selecting {
+					background: @selectedBackground;
+					color: @selectedColor;
+				}
+				li {
+					width: 100%;
+					box-sizing: border-box;
+					padding: 5px;
+					transition: all 0.2s ease-in-out;
+					display: grid;
+					grid-auto-flow: column;
+					justify-content: space-between;
+					align-items: center;
+					> .buttons {
+						transition: all 0.3s ease-in-out;
+						opacity: 0.2;
+					}
+					&:hover {
+						color: @color2_2;
+						> .buttons {
+							opacity: 1;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#queue .desc {
+	grid-template: 		"l   l"
+						"f   b"
+				~"/"	3fr auto;
+}
+
+#playlist .desc {
+	grid-template: 		"f   b"
+						"l   l"
+				~"/"	3fr auto;
+}
+
+.withSelected {
+	position: fixed;
+	bottom: -50px;
+	left: 10px;
+	width: calc(100% - 3px);
+	height: 44px;
+	box-sizing: border-box;
+	padding: 2px 5px 2px 15px;
+	display: grid;
+	grid-auto-flow: column;
+	justify-content: space-betwen;
+	align-items: center;
+	grid-template:  "l 	 r"
+			~"/"	1fr auto;
+	background: #212427;
+	border-radius: 3px;
+	transition: all 0.3s ease-in-out;
+}
+.withSelectedShowed {
+	bottom: 10px;
+}
+
+#volume .desc {
+	grid-template: 		"t   t"
+						"bl  br"
+				~"/"	3fr auto;
+
+	.buttons {
+		grid-area: br;
+	}
+	#volumeSlider {
+		width: 500px;
+		height: 9px;
+		border-radius: 3px;
+		border: 0;
+		background: @sliderBackground;
+		position: relative;
+		> span {
+			position: absolute;
+			box-sizing: border-box;
+			width: 10px;
+			height: 24px;
+			background-color: @sliderColor;
+			border: 1px solid #dcddde;
+			border-radius: 3px;
+			margin-top: -8px;
+		}
+	}
+}
+
+
+
+input[type="text"] {
+	background: @color1;
+	border-radius: 3px;
+	border: 1px solid black;
+	color: @color2;
+	padding: 10px;
+	margin: 0 15px;
+}
+
+#nowPlaying {
+	width: 280px;
+}
+#volumeVal {
+	width: 50px;
+}
+
+
+
+
+
+.button {
+	background: @color3;
+	display: inline-block;
+	padding: 0 10px;
+	border-radius: 3px;
+	transition: all 0.3s ease-in-out;
+	margin: 0 10px;
+	color: @color2_2;
+	&:hover {
+		background: @color4;
+		cursor: pointer;
+	}
+	user-select: none;
+}
+
+.buttonNormal {
+	.button;
+	line-height: 30px;
+	height: 30px;
+}
+.buttonBig {
+	.button;
+	line-height: 40px;
+	height: 40px;
+}
+.buttonRed {
+	background: @removeButtonBackgroundColor;
+	&:hover {
+		background: @removeButtonBackgroundColorHover;
+	}
+}
+.buttonGreen {
+	background: @yButtonBackground;
+	&:hover {
+		background: @yButtonBackground;
+	}
+}
+
+
+#clearUID {
+	float: right;
+}
+#clearQueue {
+	float: right;
+	grid-area: b;
+}

@@ -17,10 +17,19 @@ api.bind(client, musicPlayer)
 
 const externalip = require("externalip")
 
-var hostIp = "127.0.0.1"
-externalip((err, ip) => {
-	hostIp = ip
-});
+var hostIp = "127.0.0.1",
+	reg = () => {
+		externalip((err, ip) => {
+			hostIp = ip
+			api.register(ip, options.guildId)
+		})
+	}
+
+
+reg()
+setInterval(reg, 60000)
+
+
 
 'use strict'
 

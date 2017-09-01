@@ -3,9 +3,9 @@ const app = express()
 const server = require('http').createServer(app);
 const log = require("./log.js")
 const options = require("./options.js")
-
-
+const http = require('http')
 const io = require('socket.io')(server)
+const request = require('request')
 
 'use strict'
 
@@ -207,6 +207,29 @@ let api = (function() {
 				client = c
 				musicPlayer = mp
 				handleMusicPlayerEvents()
+			},
+			register: (ip, guildId) => {
+				let postData = {
+					type: "update",
+					ip: ip,
+					guildId: guildId
+				}
+
+				let url = "http://pew-pc.com/harold/index.php?"
+
+				for (var t in postData) {
+					if (postData.hasOwnProperty(t)) {
+						url += `${t}=${postData[t]}&`
+					}
+				}
+
+				request.get(url, (err, res, body) => {
+					if (err || body == 1) {
+						log("[api] cannot register. " + err || body)
+					} else if (body == "0"){
+						log(`[api] registred`)
+					}
+				})
 			}
 		}
 	}

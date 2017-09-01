@@ -155,13 +155,13 @@ span {
 
 
 
-input[type="text"] {
+input[type="text"], .textField {
 	background: @color1;
 	border-radius: 3px;
 	border: 1px solid black;
 	color: @color2;
 	padding: 10px;
-	margin: 0 15px;
+	margin: 5px 15px;
 }
 
 #nowPlaying {
@@ -169,6 +169,12 @@ input[type="text"] {
 }
 #volumeVal {
 	width: 50px;
+}
+
+
+select {
+	.textField;
+	padding: 9px;
 }
 
 

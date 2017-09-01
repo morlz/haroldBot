@@ -23,6 +23,10 @@
 			</div>
 		</li>
 	</script>
+
+	<script type="text/x-template" id="selectServerOption-tpl">
+		<option v-bind:value="item.ip"> {{ item.guildId }}</option>
+	</script>
 </head>
 <body>
 	<div class="mainWrapper">
@@ -30,12 +34,22 @@
 			<h2>Сервер</h2>
 			<div class="desc">
 				<p>
-					ИП сервера: <input id="ip" v-model="ip" type="text" value="node server ip">
+					Выберите сервер:
+					<select v-model="selectedServer">
+						<option
+							is="selectServerOption"
+							v-for="item in onlineServers"
+							v-bind:item="item"
+						><option>
+					</select>
+				</p>
+				<p>
+					Или введите ИП сервера: <input id="ip" v-model="ip" type="text">
 				</p>
 				<div class="buttons">
 					<div id="refreshAll" class="buttonNormal" @click="refreshAll">Обновить</div>
 				</div>
-			</div>
+			</option>
 		</section>
 		<section id="uid">
 			<h2>ID Пользоателя</h2>

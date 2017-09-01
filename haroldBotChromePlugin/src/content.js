@@ -5,6 +5,11 @@ Vue.component('item', {
     props: ['filename', 'index', 'add']
 })
 
+Vue.component('selectServerOption', {
+    template: `#selectServerOption-tpl`,
+    props: ['item']
+})
+
 var main = new Vue({
     el: '.mainWrapper',
     data: {
@@ -17,6 +22,8 @@ var main = new Vue({
         volume: 10,
 		playListSelectedCount: 0,
 		serverIp: "",
+		selectedServerIp: "",
+		onlineServers: [],
 		port: 2303
     },
 	computed: {
@@ -30,6 +37,17 @@ var main = new Vue({
 					'serverIp': newIp
 				})
 				this.serverIp = newIp;
+
+			}
+		},
+		selectedServer: {
+			get: function () {
+				return this.selectedServerIp
+			},
+			set: function (newValue) {
+				this.selectedServerIp = newValue
+				this.ip = newValue
+				this.refreshAll()
 			}
 		}
 	},
@@ -196,7 +214,6 @@ chrome.storage.onChanged.addListener((data, area) => {
     UID = data.userId.newValue
 })
 
-
 // ###  init  ###
 
 var UID, volumeSlider, sliderDataSendTimeout, socket;
@@ -238,4 +255,14 @@ $(function() {
 
 		main.refreshAll()
     })
+
+	var refreshOnlineServers = () => {
+		$.get("http://pew-pc.com/harold/index.php", data => {
+			main.onlineServers = JSON.parse( data )
+		})
+	}
+
+	refreshOnlineServers()
+	setInterval(refreshOnlineServers, 10000)
+
 })

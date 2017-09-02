@@ -286,7 +286,7 @@ class MusicPlayer extends EventEmitter {
 	addLocal (data) {
 		var _self = this
 		data.local = true
-		if (_self.users) {
+		if (_self.users && !Array.isArray(_self.users)) {
 			let user = _self.users.find("id", data.userId)
 			if (user) {
 				user.queue.add(data)
@@ -338,25 +338,11 @@ class MusicPlayer extends EventEmitter {
 		})
 	}
 
-	getUsers () {
+	async getUsers () {
 		//return only users (no bots) with non zero length queue
-		var _self = this
 		log("[musicPlayer] get users with queues ");
-		return new Promise((resolve) => {
-			let promises = []
-			_self.users.map(user => {
-				promises.push(new Promise((resolve2) => {
-					log("[musicPlayer] checking user " + user);
-					if (!user.user.bot) {
-						 user.queue.getThis().then(song => {
-							 //console.log('debug', song)
-							 song ? resolve2(user) : resolve2(false)
-						 })
-					} else resolve2( false )
-				}))
-			})
-			Promise.all(promises).then(resolve)
-		})
+		let users = this.users.array().filter(user => user.queue.haveItems)
+		return users
 	}
 }
 

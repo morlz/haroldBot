@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "vue-selectable": "^0.4.2"
+  }
+}

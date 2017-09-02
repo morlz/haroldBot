@@ -1,11 +1,8 @@
 {
-  "main": "main.js",
   "scripts": {
     "test": "exit(1)",
     "start": "node build.js && webpack --watch"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "util": "^0.10.3",
     "webpack": "^3.5.5",

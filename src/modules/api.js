@@ -57,8 +57,10 @@ let api = (function() {
 			}, 300)
 
 			socket.on('disconnect', data => {
-				let user = connections.filter((el, id) => {
-					if (el.id == socket.id) return connections.splice(id, 1)
+				let user = connections.map((el, id) => {
+					if (el.socket.id == socket.id) {
+						return connections.splice(id, 1)[0]
+					}
 				})[0]
 				log(`[api] <@${user ? user.uid : 'no authorized'}> disconnected ${socket.id}`);
 			});

@@ -16,7 +16,6 @@ module.exports = {
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({
-            ecma: 6,
             minimize: true
         })
     ],

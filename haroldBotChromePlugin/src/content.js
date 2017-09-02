@@ -130,12 +130,14 @@ var main = new Vue({
 					if (el.selected) return id
 				})
 				.filter(el => typeof el == 'number')
+
 			if (selectedIDS.length > 2 && selectedIDS[0] == 0) selectedIDS.splice(0, 1)
 
 			socket.emit("addSelectedFromPlaylistInQueue", {
                 userId: UID,
                 ids: selectedIDS
             })
+
 		},
 		removeSelectedFromPlayList: function () {
 			let selectedIDS = main.playList
@@ -238,12 +240,18 @@ $(function() {
 
 	$(".selectable").selectable({
 		selected: function (e, ui) {
-			main.playList[$(ui.selected).index()].selected = true
-			main.playListSelectedCount++
+			let item = main.playList[$(ui.selected).index()]
+			if (!item.selected) {
+				item.selected = true
+				main.playListSelectedCount++
+			}
 		},
 		unselected: function (e, ui) {
-			main.playList[$(ui.unselected).index()].selected = false
-			main.playListSelectedCount--
+			let item = main.playList[$(ui.selected).index()]
+			if (item.selected) {
+				item.selected = false
+				main.playListSelectedCount--
+			}
 		}
 	})
 

@@ -10,6 +10,7 @@ class UserQueue extends EventEmitter {
 		this.member = member
 		this.queue = []
 		this.playList = new UserPlayList(member)
+		this.addFromPlayList()
 	}
 	add (toAdd) {
 		toAdd.addTime = Date.now()
@@ -20,17 +21,19 @@ class UserQueue extends EventEmitter {
 		log(`[userQueue] ${this.member} added ${toAdd.fileName}`)
 	}
 	remove (id) {
+		var ret = 0
 		if (id == "all") {
 			this.queue = []
 		} else {
-			this.queue.splice(id, 1)
+			ret = this.queue.splice(id, 1)
 		}
 		if (!this.queue.length) this.addFromPlayList()
 		this.emit("changed", this.queue)
+		return ret
 	}
 	skip () {
 		log(`[UserQueue] ${this.member} skiped`)
-		this.remove(0)
+		return this.remove(0)
 	}
 	getAll() {
 		log(`[UserQueue] ${this.member} get all`)
@@ -65,6 +68,9 @@ class UserQueue extends EventEmitter {
 				resolve( _self.queue[0] )
 			}
 		})
+	}
+	get haveItems() {
+		return !!this.queue.length
 	}
 }
 

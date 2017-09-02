@@ -1,4 +1,4 @@
-import VueResoure from 'vue-resource'
+var VueResoure = require('vue-resource')
 
 Vue.use(VueResoure)
 
@@ -183,7 +183,6 @@ var main = new Vue({
 		let refreshOnlineServers = () => {
 			this.$http.get("http://pew-pc.com/harold/index.php")
 				.then((data) => {
-					console.log(data);
 					this.onlineServers = data.body
 				})
 		}
@@ -199,12 +198,16 @@ var main = new Vue({
 var addSocketEvents = (socket) => {
 	socket.on("all", cache => {
 	    let thisUser = cache.users.filter(user => user.id == UID)[0]
+
 	    main.nowPlaying = cache.nowPlaying.fileName
-	    main.playList = thisUser.playList
 	    main.onPause = cache.onPause
-	    main.queue = thisUser.queue
 	    main.volume = cache.volume
 	    volumeSlider.slider("value", cache.volume)
+
+		if(!thisUser) return
+
+		main.playList = thisUser.playList
+		main.queue = thisUser.queue
 	})
 
 	socket.on("queueChange", data => {

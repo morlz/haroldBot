@@ -1,6 +1,6 @@
-var webpack = require('webpack');
-var path = require('path');
-var nodeExternals = require('webpack-node-externals');
+const webpack = require('webpack');
+const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 var plugins = [

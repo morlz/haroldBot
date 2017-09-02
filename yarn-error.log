@@ -1,0 +1,66 @@
+Arguments: 
+  D:\User Programs\nodejs\node.exe D:\User Programs\yarn\bin\yarn.js
+
+PATH: 
+  D:\User Programs\Scripts\;D:\User Programs\;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;D:\User Programs\Git\cmd;C:\ffmpeg-20170807-1bef008-win64-static\bin;D:\User Programs\nodejs\;D:\xampp\php;D:\User Programs\yarn\bin;C:\ProgramData\chocolatey\bin;C:\Users\Аркадий\AppData\Local\Microsoft\WindowsApps;C:\Users\Аркадий\AppData\Local\atom\bin;C:\Users\Аркадий\AppData\Roaming\npm;C:\Users\Аркадий\AppData\Local\Yarn\bin
+
+Yarn version: 
+  0.27.5
+
+Node version: 
+  8.4.0
+
+Platform: 
+  win32 x64
+
+npm manifest: 
+  {
+    "name": "haroldbot",
+    "version": "1.0.0",
+    "description": "music bot for discord",
+    "main": "main.js",
+    "scripts": {
+      "test": "exit(1)",
+      "start": "node build && node --inspect --trace-warnings ./assets/main.js",
+      "dev": "node --trace-warnings --inspect ./src/main.js",
+      "pack": "pkg --out-path ./exec/ ./assets"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "callback-loader": "^0.2.4",
+      "discord.js": "^11.1.0",
+      "node": "^8.3.0",
+      "opusscript": "0.0.3",
+      "util": "^0.10.3",
+      "webpack": "^3.5.5"
+    },
+    "devDependencies": {
+      "babel-cli": "^6.26.0",
+      "babel-core": "^6.26.0",
+      "babel-loader": "^7.1.2",
+      "babel-preset-es2015": "^6.24.1",
+      "babel-preset-es2017": "^6.24.1",
+      "binary-loader": "0.0.1",
+      "ignore-loader": "^0.1.2",
+      "jxm": "^0.4.0",
+      "uglify-es": "^3.0.28",
+      "uglifyjs-webpack-plugin": "^0.4.6",
+      "webpack-node-externals": "^1.6.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  SyntaxError: C:\package.json: Unexpected end of JSON input
+      at JSON.parse (<anonymous>)
+      at D:\User Programs\yarn\lib\yarn-cli.js:747:57
+      at Generator.next (<anonymous>)
+      at step (D:\User Programs\yarn\lib\yarn-cli.js:91:30)
+      at D:\User Programs\yarn\lib\yarn-cli.js:102:13
+      at <anonymous>

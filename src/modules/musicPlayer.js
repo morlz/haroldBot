@@ -87,33 +87,11 @@ class MusicPlayer extends EventEmitter {
 		}
 	}
 
-	getUsers () {
-		var _self = this
-		log("[musicPlayer] get users with queues ");
-		return new Promise((resolve) => {
-			let promises = [];
-			_self.users.map(user => {
-				promises.push(new Promise((resolve2) => {
-					log("[musicPlayer] checking user " + user);
-					if (!user.user.bot) {
-						 user.queue.getThis().then(song => {
-							 //console.log('debug', song)
-							 song ? resolve2(user) : resolve2(false)
-						 })
-					} else resolve2( false )
-				}))
-			})
-			Promise.all(promises).then(resolve)
-		})
-	}
-
 	play () {
 		var _self = this
 
-		var _filterUsers = users => {
-			return new Promise((resolve) => {
-				resolve( users.filter(el => el ? el : false) )
-			})
+		var _filterUsers = async users => {
+			return users.filter(el => el ? el : false)
 		}
 
 		var _checkUsersCount = users => {
@@ -127,7 +105,7 @@ class MusicPlayer extends EventEmitter {
 			})
 		}
 
-		var _getRandomUser = users => {
+		var _getRandomUser = async users => {
 			return new Promise((resolve, reject) => {
 				let randomUserId = Math.round( Math.random() * ( users.length - 1 ) )
 				let randomUser = users[ randomUserId ]
@@ -137,17 +115,11 @@ class MusicPlayer extends EventEmitter {
 			})
 		}
 
-		var _getAudio = randomUser => {
-			return new Promise((resolve, reject) => {
-				randomUser.queue.getThis()
-				.then(audio => {
-					let data = {
-						user: randomUser,
-						audio: audio
-					}
-					resolve(data)
-				})
-			})
+		var _getAudio = async randomUser => {
+			return {
+				user: randomUser,
+				audio: await randomUser.queue.getThis()
+			}
 		}
 
 		var _selectPlayerAndPlay = data => {
@@ -249,12 +221,9 @@ class MusicPlayer extends EventEmitter {
 					//playing from url
 					player = _playUrl
 				}
+				data.user.queue.skip()
 				player(data.audio)
-					.then(() => {
-						//after playing skip queue and play again
-						data.user.queue.skip()
-						resolve()
-					})
+					.then(resolve)
 					.catch(reject)
 			})
 		}
@@ -296,46 +265,38 @@ class MusicPlayer extends EventEmitter {
 		}
 	}
 
-	refresh () {
+	async refresh () {
 		var _self = this
 
-		var _updateUsers = () => {
-			return new Promise((resolve) => {
-				_self.client.voiceConnections.map((el, id) => {
-					if (id == options.guildId) {
-						_self.users = el.channel.members
-					}
-				})
-				log("[musicPlayer] update users")
-				resolve()
+		var _updateUsers = async () => {
+			_self.client.voiceConnections.map((el, id) => {
+				if (id == options.guildId) {
+					_self.users = el.channel.members
+				}
 			})
+			log("[musicPlayer] update users")
 		}
 
-		var _updateQueues = () => {
-			return new Promise((resolve) => {
-				_self.users.map((user) => {
-					if (!user.queue) {
-						user.queue = new UserQueue(user)
+		var _updateQueues = async () => {
+			_self.users.map((user) => {
+				if (!user.queue) {
+					user.queue = new UserQueue(user)
 
-						user.queue.on("changed", data => {
-							_self.emit("queueChange", user)
-						})
+					user.queue.on("changed", data => {
+						_self.emit("queueChange", user)
+					})
 
-						user.queue.playList.on("playListChange", data => {
-							_self.emit("playListChange", user)
-						})
-					}
-				})
-				log("[musicPlayer] update queues")
-				resolve()
+					user.queue.playList.on("playListChange", data => {
+						_self.emit("playListChange", user)
+					})
+				}
 			})
+			log("[musicPlayer] update queues")
 		}
-		return new Promise((resolve) => {
-			log("[musicPlayer] refresh")
-			_updateUsers()
-				.then(_updateQueues)
-				.then(resolve)
-		})
+
+		log("[musicPlayer] refresh")
+		await _updateUsers()
+		await _updateQueues()
 	}
 
 	async getUsers () {

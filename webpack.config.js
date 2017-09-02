@@ -1,8 +1,15 @@
 var webpack = require('webpack');
 var path = require('path');
 var nodeExternals = require('webpack-node-externals');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
-//const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+var plugins = [
+	new webpack.DefinePlugin({ "global.GENTLY": false }),
+	new UglifyJSPlugin({
+		ecma: 6,
+		minimize: true
+	})
+]
 
 module.exports =  {
 	context: path.join(__dirname, 'src'),
@@ -10,13 +17,7 @@ module.exports =  {
 	output: {
 		path: path.join(__dirname, 'assets')
 	},
-	plugins: [
-		new webpack.DefinePlugin({ "global.GENTLY": false }),
-		new webpack.optimize.UglifyJsPlugin({
-			ecma: 6,
-			minimize: true
-		})
-	],
+	plugins: plugins,
 	target: 'async-node',
 	externals: [nodeExternals({
 		modulesDir: 'src/node_modules'

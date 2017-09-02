@@ -1,3 +1,7 @@
+import VueResoure from 'vue-resource'
+
+Vue.use(VueResoure)
+
 'use strict'
 
 Vue.component('item', {
@@ -166,7 +170,27 @@ var main = new Vue({
 				userId: main.UID
 			})
 		}
-    }
+    },
+	created: function () {
+		chrome.storage.sync.get(["userId", "serverIp"], (data) => {
+	        this.UID = data.userId
+			this.ip = data.serverIp
+			UID = data.userId
+
+			this.refreshAll()
+	    })
+
+		let refreshOnlineServers = () => {
+			this.$http.get("http://pew-pc.com/harold/index.php")
+				.then((data) => {
+					console.log(data);
+					this.onlineServers = data.body
+				})
+		}
+
+		refreshOnlineServers()
+		setInterval(refreshOnlineServers, 10000)
+	}
 })
 
 
@@ -254,23 +278,5 @@ $(function() {
 			}
 		}
 	})
-
-
-    chrome.storage.sync.get(["userId", "serverIp"], (data) => {
-        main.UID = data.userId
-		main.ip = data.serverIp
-		UID = data.userId
-
-		main.refreshAll()
-    })
-
-	var refreshOnlineServers = () => {
-		$.get("http://pew-pc.com/harold/index.php", data => {
-			main.onlineServers = JSON.parse( data )
-		})
-	}
-
-	refreshOnlineServers()
-	setInterval(refreshOnlineServers, 10000)
 
 })

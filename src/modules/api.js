@@ -56,6 +56,10 @@ let api = (function() {
 				socket.emit("getUID")
 			}, 300)
 
+			socket.on('newSong', data => {
+
+			})
+
 			socket.on('disconnect', data => {
 				let user = connections.map((el, id) => {
 					if (el.socket.id == socket.id) {

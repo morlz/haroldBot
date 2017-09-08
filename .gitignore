@@ -3,3 +3,4 @@ cache
 playLists
 tmp
 package-lock.json
+config.json
